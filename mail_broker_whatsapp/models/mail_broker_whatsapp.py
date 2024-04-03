@@ -147,6 +147,7 @@ class MailBrokerWhatsappService(models.AbstractModel):
                 message_type="comment",
                 attachments=attachments,
             )
+            self._post_process_message(new_message, chat)
             related_message_id = message.get("context", {}).get("id", False)
             if related_message_id:
                 related_message = (
@@ -176,6 +177,7 @@ class MailBrokerWhatsappService(models.AbstractModel):
                             attachments=attachments,
                         )
                     )
+                    self._post_process_reply(related_message)
                     new_message.broker_message_id = new_related_message
 
     def _send(
@@ -233,7 +235,8 @@ class MailBrokerWhatsappService(models.AbstractModel):
                 )
                 response.raise_for_status()
                 message = response.json()
-            if record.mail_message_id.body:
+            body = self._get_message_body(record)
+            if body:
                 response = requests.post(
                     "https://graph.facebook.com/v%s/%s/messages"
                     % (
@@ -241,9 +244,7 @@ class MailBrokerWhatsappService(models.AbstractModel):
                         broker.whatsapp_from_phone,
                     ),
                     headers={"Authorization": "Bearer %s" % broker.token},
-                    json=self._send_payload(
-                        record.broker_channel_id, body=record.mail_message_id.body
-                    ),
+                    json=self._send_payload(record.broker_channel_id, body=body),
                     timeout=10,
                     proxies=self._get_proxies(),
                 )
