@@ -31,6 +31,7 @@
                         <h2>First steps</h2>
                         <span>Define the values of the fields <b>Webhook Key</b> and <b
                             >Whatsapp Security Key</b>.
+                            You should set some random value of your choice for this fields.
                             Ensure that facebook will be able to comunicate with your server.</span>
                         <h2>Creating the Application from meta developer</h2>
                         <ol>
