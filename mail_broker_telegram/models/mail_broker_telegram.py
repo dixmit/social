@@ -213,6 +213,7 @@ class MailBrokerTelegramService(models.AbstractModel):
                 message_type="comment",
                 attachments=attachments,
             )
+            self._post_process_message(new_message, chat)
             related_message_id = (
                 update.message.reply_to_message and update.message.reply_to_message.id
             )
@@ -243,6 +244,7 @@ class MailBrokerTelegramService(models.AbstractModel):
                         )
                     )
                     new_message.broker_message_id = new_related_message
+                    self._post_process_reply(related_message)
             return new_message
 
     async def _send_telegram(
@@ -252,9 +254,10 @@ class MailBrokerTelegramService(models.AbstractModel):
         await bot.initialize()
         chat = await bot.get_chat(record.broker_channel_id.token)
         message = False
-        if record.mail_message_id.body:
+        body = self._get_message_body(record)
+        if body:
             message = await chat.send_message(
-                html2plaintext(record.mail_message_id.body), parse_mode=parse_mode
+                html2plaintext(body), parse_mode=parse_mode
             )
         for attachment in record.mail_message_id.attachment_ids:
             # Remember that files are limited to 50 Mb on Telegram
