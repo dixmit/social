@@ -21,6 +21,9 @@ class MailNotification(models.Model):
         selection=lambda r: r.env["mail.broker"]._fields["broker_type"].selection
     )
 
+    def _set_read_broker(self):
+        self.sudo().write({"is_read": True, "read_date": fields.Datetime.now()})
+
     def _notification_format(self):
         result = super()._notification_format()
         for record, formatted_value in zip(self, result):

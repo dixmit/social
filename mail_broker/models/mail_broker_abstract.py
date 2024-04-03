@@ -12,6 +12,14 @@ class MailBrokerAbstract(models.AbstractModel):
     def _receive_update(self, broker, kwargs):
         pass
 
+    def _post_process_message(self, message, channel):
+        self.env["mail.notification"].search(
+            [("broker_channel_id", "=", channel.id), ("is_read", "=", False)]
+        )._set_read_broker()
+
+    def _post_process_reply(self, related_message):
+        pass
+
     def _update_content_after_hook(self, channel, message):
         pass
 
@@ -62,3 +70,6 @@ class MailBrokerAbstract(models.AbstractModel):
         self, broker, record, auto_commit=False, raise_exception=False, parse_mode=False
     ):
         raise NotImplementedError()
+
+    def _get_message_body(self, record):
+        return record.mail_message_id.body
