@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.AttachmentImage" t-inherit-mode="extension">
+        <xpath expr="//div/div/div/div" position="attributes">
+            <attribute name="class" add="mt-auto" separator=" " />
+        </xpath>
+        <xpath expr="//div/div/div/div" position="before">
+        <!-- TODO: cambiar método t-on-click y clase ..._actionUnlink-->
+            <div
+                class="o_AttachmentImage_action o_AttachmentImage_actionUnlink btn btn-sm btn-dark rounded opacity-75 opacity-100-hover"
+                t-att-class="{'o-pretty': attachmentImage.attachmentList.composerViewOwner}"
+                tabindex="0"
+                aria-label="Select"
+                role="menuitem"
+                t-on-click="attachmentImage.onClickUnlink"
+                title="Select"
+            >
+                <i class="fa fa-star-o" />
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.AttachmentCard" t-inherit-mode="extension">
+        <xpath expr="//div/div/div[3]/t[3]" position="before">
+        <!-- TODO: t-on-click se debe cambiar el método-->
+        <!-- TODO: añadir que sea hover-->
+            <button
+                class="o_AttachmentCard_asideItem o_AttachmentCard_asideItemUnlink btn top-0 justify-content-center align-items-center d-flex w-100 h-100 rounded-0 opacity-100-hover"
+                t-attf-class="{{ attachmentCard.attachmentList.composerViewOwner ? 'o-pretty position-absolute btn-primary transition-base' : 'bg-300' }}"
+                t-on-click="attachmentCard.onClickUnlink"
+                title="Select"
+            >
+                <i class="fa fa-star-o" role="img" aria-label="Select" />
+            </button>
+        </xpath>
+    </t>
+</templates>
